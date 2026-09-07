@@ -1,0 +1,21 @@
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libssl3 \
+    libgtk-3-0t64 \
+    libwebkit2gtk-4.1-0 \
+    libayatana-appindicator3-1 \
+    librsvg2-2 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY cc-switch-server-linux-amd64 /usr/local/bin/cc-switch-server
+RUN chmod +x /usr/local/bin/cc-switch-server
+
+ENV PORT=4096 \
+    HOST=0.0.0.0 \
+    RUST_LOG=info
+
+EXPOSE 4096 15784
+
+ENTRYPOINT ["/usr/local/bin/cc-switch-server"]
